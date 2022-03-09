@@ -90,11 +90,16 @@ function game() {
             i--;
             valid = true;
         }
-     }
+    }
 
-     console.log("...");
-     if (win > lose) {
+    console.log("...");
+    console.log("Your Score: " + win);
+    console.log("Computer's Score: " + lose);
+    if (win > lose) {
         console.log("You win the game!");
-    } else
-        console.log("You lose. Try again next time!")
+    } else if (win < lose){
+        console.log("You lose. Try again next time!");
+    } else if (win == lose) {
+        console.log("It's a complete tie!");
+    }
 }

@@ -1,105 +1,127 @@
 const options = ["rock", "paper", "scissors"];
+let round = 1;
 let win = 0;
 let lose = 0;
 let tie = 0;
-let valid = true;
+let text1 = "";
+let text2 = "";
+let text3 = "";
+let results = ["", "", "", "", ""];
 
-console.log(game());
+playGame();
 
 function computerPlay() {
     x = Math.floor(Math.random() * 3);
-    return(options[x]);
+    return (options[x]);
 }
 
 function playRound(playerSelection, computerSelection) {
-    switch(playerSelection) {
-        case "rock": 
-            console.log("You choose Rock.")
-            switch(computerSelection) {
+    if (round > 5) {
+        return;
+    }
+    switch (playerSelection) {
+        case "rock":
+            text1 = "You chose Rock. ";
+            switch (computerSelection) {
                 case "rock":
-                    console.log("The computer chooses Rock.");
-                    console.log("It's a tie.");
+                    text2 = "The computer chooses Rock. It's a tie."
                     tie++;
                     break;
                 case "paper":
-                    console.log("The computer chooses paper.");
-                    console.log("You lose! Paper beats Rock.");
+                    text2 = ("The computer chooses paper. You lose! Paper beats Rock.");
                     lose++;
                     break;
                 case "scissors":
-                    console.log("The computer chooses Scissors.");
-                    console.log("You win! Rock beats Scissors.")
+                    text2 = ("The computer chooses Scissors. You win! Rock beats Scissors.");
                     win++;
                     break;
             }
             break;
         case "paper":
-            console.log("You choose Paper.")
-            switch(computerSelection) {
+            text1 = "You chose Paper. ";
+            switch (computerSelection) {
                 case "rock":
-                    console.log("The computer chooses Rock.");
-                    console.log("You win! Paper beats Rock.");
+                    text2 = ("The computer chooses Rock. You win! Paper beats Rock.");
                     win++;
                     break;
                 case "paper":
-                    console.log("The computer chooses paper.");
-                    console.log("It's a tie.");
+                    text2 = ("The computer chooses paper. It's a tie.");
                     tie++;
                     break;
                 case "scissors":
-                    console.log("The computer chooses Scissors.");
-                    console.log("You lose! Scissors beat paper.")
+                    text2 = ("The computer chooses Scissors. You lose! Scissors beat paper.");
                     lose++;
                     break;
             }
             break;
         case "scissors":
-            console.log("You choose Scissors.")
-            switch(computerSelection) {
+            text1 = "You chose Scissors. ";
+            switch (computerSelection) {
                 case "rock":
-                    console.log("The computer chooses Rock.");
-                    console.log("You lose! Rock beats Scissors.");
+                    text2 = ("The computer chooses Rock. You lose! Rock beats Scissors.");
                     lose++;
                     break;
                 case "paper":
-                    console.log("The computer chooses paper.");
-                    console.log("You win! Scissors beat Paper.");
+                    text2 = ("The computer chooses paper. You win! Scissors beat Paper.");
                     win++;
                     break;
                 case "scissors":
-                    console.log("The computer chooses Scissors.");
-                    console.log("It's a tie.")
+                    text2 = ("The computer chooses Scissors. It's a tie.");
                     tie++;
                     break;
             }
             break;
-        default:
-            valid = false;
-            console.log("You can't do that! Try typing 'Rock', 'Paper', or 'Scissors'.");
     }
+    round++;
+    results[round-2] = text1 + text2;
+    getResults();
 }
 
-function game() {
-    for (let i = 0; i < 5; i++) {
-        console.log("Round " + (i+1) + ":");
-        let input = prompt("Rock, Paper, Scissors... Make your pick.");
-        playerSelection = input.toLowerCase();
-        const computerSelection = computerPlay();
-        playRound(playerSelection, computerSelection);
-        if (!valid){
-            i--;
-            valid = true;
-        }
+function playGame() {
+    document.getElementById("rock").addEventListener("click", function(){
+        playRound("rock", computerPlay());
+    }); 
+    document.getElementById("paper").addEventListener("click", function(){
+        playRound("paper", computerPlay());
+    }); 
+    document.getElementById("scissors").addEventListener("click", function(){
+        playRound("scissors", computerPlay());
+    }); 
+    document.getElementById("reset").addEventListener("click", function(){
+        reset();
+    }); 
+}
+
+function getResults() {
+    document.getElementById("results").innerHTML = 
+        results[0] + "<br />" +
+        results[1] + "<br />" + 
+        results[2] + "<br />" + 
+        results[3] + "<br />" +
+        results[4] + "<br />";
+    
+    if (win > lose) {
+        text3 = "You win the game!";
+    } else if (win < lose) {
+        text3 = "You lose. Try again next time!";
+    } else if (win == lose) {
+        text3 = "It's a complete tie!";
     }
 
-    console.log("...");
-    console.log("Your Score: " + win);
-    console.log("Computer's Score: " + lose);
-    if (win > lose) {
-        console.log("You win the game!");
-    } else if (win < lose){
-        console.log("You lose. Try again next time!");
-    } else if (win == lose) {
-        console.log("It's a complete tie!");
+    if(round > 5){
+        document.getElementById("final").innerHTML = 
+        "<br /> Your Score: " + win + "<br />" + (" Computer's Score: " + lose + "<br />" + text3);
+    } else {
+        document.getElementById("final").innerHTML = "";
     }
+
+}
+
+function reset() {
+    win = 0;
+    lose = 0;
+    tie = 0;
+    round = 1;
+    results = ["", "", "", "", ""];
+    getResults();
 }
